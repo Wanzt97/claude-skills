@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8">
+    <!--
+      MODÈLE m05 — Objet filaire
+      Sert à : donner un corps à une idée abstraite (FICHE.md, décision n° 2).
+      L'objet est monochrome ; l'accent ne touche que la partie à désigner.
+      Les mouvements d'objet ne sont pas mesurés dans la référence (courbe incertaine) :
+      ce modèle prend la courbe de la caméra et environ 1 s par cran de rotation.
+      Pour un autre objet (boîte, colis, plateau), garder la structure : bloc > cs-incline > cs-tourne > faces.
+      Les fondus et l'extinction se posent sur le bloc, jamais sur cs-incline (la 3D s'aplatirait).
+    -->
+  </head>
+  <body>
+    <template>
+      <style>
+        #root { position: absolute; inset: 0; }
+        #m05-monde { width: 5760px; height: 3240px; }
+      </style>
+
+      <div id="root" data-composition-id="m05" data-width="1920" data-height="1080">
+        <div class="cs-scene">
+          <div class="cs-fond"></div>
+          <div id="m05-monde" class="cs-monde" data-layout-allow-overflow="">
+            <div class="cs-croix" style="left: 1500px; top: 1000px"></div>
+            <div class="cs-croix" style="left: 4200px; top: 2200px"></div>
+
+            <!-- Le cube : ce qu'on voit de l'extérieur -->
+            <div id="m05-cube" style="left: 2000px; top: 1350px; width: 480px; height: 480px; --c: 480px">
+              <div class="cs-incline">
+              <div id="m05-tourne" class="cs-tourne">
+                <div class="cs-face cs-av"></div>
+                <div class="cs-face cs-ar"></div>
+                <div class="cs-face cs-dr"></div>
+                <div class="cs-face cs-ga"></div>
+                <div class="cs-face cs-ba"></div>
+                <div id="m05-couvercle" class="cs-couvercle"><div class="cs-face cs-ha cs-accent"></div></div>
+              </div>
+              </div>
+            </div>
+            <p id="m05-nom" class="cs-mono" style="left: 2000px; top: 1985px">Ce qu'on voit</p>
+
+            <!-- Le deuxième objet : ce qu'il y a dedans -->
+            <div id="m05-coeur" style="left: 3400px; top: 1470px; width: 240px; height: 240px; --c: 240px">
+              <div class="cs-incline">
+              <div id="m05-tourne-2" class="cs-tourne">
+                <div class="cs-face cs-av"></div>
+                <div class="cs-face cs-ar"></div>
+                <div class="cs-face cs-dr"></div>
+                <div class="cs-face cs-ga"></div>
+                <div class="cs-face cs-ba"></div>
+                <div class="cs-face cs-ha"></div>
+              </div>
+              </div>
+            </div>
+            <p id="m05-nom-2" class="cs-mono" style="left: 3400px; top: 1825px">Ce qu'il y a dedans</p>
+
+            <p id="m05-idee" class="cs-gras cs-moyen" style="left: 2000px; top: 1090px; width: 1800px">l'idée, en trois mots</p>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        CamSearch.pret(() => {
+          const tl = gsap.timeline({ paused: true });
+          const p = CamSearch.planche({ tl, monde: "#m05-monde", duree: 11 });
+          const CRAN = 1.0; // durée d'un cran de rotation
+
+          // ---------- LES BEATS (secondes locales à la scène) ----------
+          const ENTREE = 0.3;
+          const MOT_IDEE = 1.2;       // l'idée est nommée
+          const ZOOM_DESSUS = 3.0;    // « regardez le dessus »
+          const OUVERTURE = 4.4;      // le couvercle se lève
+          const VOL_COEUR = 6.4;      // la voix passe à ce qu'il y a dedans
+          const VUE_ENSEMBLE = 9.0;
+
+          p.cadrer({ x: 2700, y: 1520 }, 0.95);
+          p.apparaitre("#m05-cube", ENTREE);
+          tl.fromTo("#m05-tourne", { rotationY: -128 }, { rotationY: -38, duration: CRAN, ease: CamSearch.COURBE_VOL }, ENTREE);
+          p.apparaitre("#m05-nom", ENTREE + 0.6);
+          p.apparaitre("#m05-idee", p.auMot(MOT_IDEE));
+
+          p.voler(ZOOM_DESSUS, "#m05-cube", 1.9);
+          tl.fromTo("#m05-couvercle", { y: 0 }, { y: -150, duration: CRAN, ease: CamSearch.COURBE_VOL }, OUVERTURE);
+
+          p.voler(VOL_COEUR, { x: 3640, y: 1640 }, 1.9);
+          p.eteindre("#m05-cube, #m05-nom, #m05-idee", VOL_COEUR);
+          p.apparaitre("#m05-coeur, #m05-nom-2", VOL_COEUR + 0.3);
+          tl.fromTo("#m05-tourne-2", { rotationY: -38 }, { rotationY: 52, duration: CRAN, ease: CamSearch.COURBE_VOL }, VOL_COEUR + 1.4);
+
+          p.voler(VUE_ENSEMBLE, { x: 2950, y: 1540 }, 0.72, { duree: "long", derive: -1 });
+
+          window.__timelines["m05"] = p.terminer();
+        });
+      </script>
+    </template>
+  </body>
+</html>

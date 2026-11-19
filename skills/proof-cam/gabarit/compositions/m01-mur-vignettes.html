@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8">
+    <!--
+      MODÈLE m01 — Mur de vignettes, avec zoom à travers en sortie
+      Sert à : montrer le nombre ou la répétition ; ouvrir une vidéo par une preuve visuelle.
+      Chaque vignette est un extrait réel. Dans un vrai montage, remplacer chaque bloc
+      « cs-a-remplacer » par :
+        <video src="../assets/broll/extrait-1.mp4" muted playsinline
+               data-start="0.3" data-duration="9" style="width:100%;height:100%;object-fit:cover"></video>
+      (data-start = l'instant où la vignette surgit, en secondes locales à la scène).
+    -->
+  </head>
+  <body>
+    <template>
+      <style>
+        #root { position: absolute; inset: 0; }
+        #m01-monde { width: 5760px; height: 3240px; }
+        .m01-vignette { width: 560px; height: 315px; }
+        .m01-etq { margin-top: 0; }
+      </style>
+
+      <div id="root" data-composition-id="m01" data-width="1920" data-height="1080">
+        <div class="cs-scene">
+          <div class="cs-fond"></div>
+          <div id="m01-monde" class="cs-monde" data-layout-allow-overflow="">
+            <div class="cs-croix" style="left: 1900px; top: 900px"></div>
+            <div class="cs-croix" style="left: 3832px; top: 900px"></div>
+            <div class="cs-croix" style="left: 1900px; top: 2312px"></div>
+            <div class="cs-croix" style="left: 3832px; top: 2312px"></div>
+
+            <!-- Grille 3 × 3. Pas : 620 px en largeur, 440 px en hauteur. -->
+            <div id="m01-v1" class="m01-vignette cs-carte" style="left: 1980px; top: 980px"><div class="cs-a-remplacer" style="width: 100%; height: 100%">Extrait 1</div></div>
+            <div id="m01-v2" class="m01-vignette cs-carte" style="left: 2600px; top: 980px"><div class="cs-a-remplacer" style="width: 100%; height: 100%">Extrait 2</div></div>
+            <div id="m01-v3" class="m01-vignette cs-carte" style="left: 3220px; top: 980px"><div class="cs-a-remplacer" style="width: 100%; height: 100%">Extrait 3</div></div>
+            <div id="m01-v4" class="m01-vignette cs-carte" style="left: 1980px; top: 1420px"><div class="cs-a-remplacer" style="width: 100%; height: 100%">Extrait 4</div></div>
+            <div id="m01-v5" class="m01-vignette cs-carte" style="left: 2600px; top: 1420px"><div class="cs-a-remplacer" style="width: 100%; height: 100%">Extrait 5</div></div>
+            <div id="m01-v6" class="m01-vignette cs-carte" style="left: 3220px; top: 1420px"><div class="cs-a-remplacer" style="width: 100%; height: 100%">Extrait 6</div></div>
+            <div id="m01-v7" class="m01-vignette cs-carte" style="left: 1980px; top: 1860px"><div class="cs-a-remplacer" style="width: 100%; height: 100%">Extrait 7</div></div>
+            <div id="m01-v8" class="m01-vignette cs-carte" style="left: 2600px; top: 1860px"><div class="cs-a-remplacer" style="width: 100%; height: 100%">Extrait 8</div></div>
+            <div id="m01-v9" class="m01-vignette cs-carte" style="left: 3220px; top: 1860px"><div class="cs-a-remplacer" style="width: 100%; height: 100%">Extrait 9</div></div>
+
+            <!-- Une étiquette sous chaque vignette : le mot que tout le monde répète. -->
+            <div id="m01-e1" class="m01-etq cs-etiquette" style="left: 1980px; top: 1307px">Le mot</div>
+            <div id="m01-e2" class="m01-etq cs-etiquette" style="left: 2600px; top: 1307px">Le mot</div>
+            <div id="m01-e3" class="m01-etq cs-etiquette" style="left: 3220px; top: 1307px">Le mot</div>
+            <div id="m01-e4" class="m01-etq cs-etiquette" style="left: 1980px; top: 1747px">Le mot</div>
+            <div id="m01-e5" class="m01-etq cs-etiquette" style="left: 2600px; top: 1747px">Le mot</div>
+            <div id="m01-e6" class="m01-etq cs-etiquette" style="left: 3220px; top: 1747px">Le mot</div>
+            <div id="m01-e7" class="m01-etq cs-etiquette" style="left: 1980px; top: 2187px">Le mot</div>
+            <div id="m01-e8" class="m01-etq cs-etiquette" style="left: 2600px; top: 2187px">Le mot</div>
+            <div id="m01-e9" class="m01-etq cs-etiquette" style="left: 3220px; top: 2187px">Le mot</div>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        CamSearch.pret(() => {
+          const tl = gsap.timeline({ paused: true });
+          const p = CamSearch.planche({ tl, monde: "#m01-monde", duree: 10 });
+
+          // ---------- LES BEATS (secondes locales à la scène) ----------
+          // Un extrait par mot prononcé : ici, l'instant où chaque extrait dit « le mot ».
+          const MOTS = [0.3, 1.2, 2.0, 2.7, 3.3, 3.9, 4.5, 5.0, 5.5];
+          const RECUL = 1.0;          // la caméra recule pendant que la grille se remplit
+          const TOUT_ACCENT = 6.6;    // toutes les étiquettes passent à l'accent
+          const TRAVERSEE = 8.4;      // zoom à travers la vignette centrale, jusqu'à la coupe
+
+          p.cadrer("#m01-v1", 2.6);
+          MOTS.forEach((t, i) => {
+            const n = i + 1;
+            p.surgir(`#m01-v${n}`, t);
+            p.apparaitre(`#m01-e${n}`, p.auMot(t));
+            if (n > 1) p.desaturer(`#m01-v${n - 1}`, t); // l'extrait précédent perd sa couleur
+          });
+          p.voler(RECUL, "#m01-v5", 0.78, { duree: 2.8, derive: -1 });
+
+          p.accentuer(".m01-etq", TOUT_ACCENT);
+          p.desaturer("#m01-v9", TOUT_ACCENT);
+
+          // La scène suivante doit commencer cadrée sur cette même vignette.
+          p.traverser(TRAVERSEE, "#m01-v5", 1.6);
+
+          window.__timelines["m01"] = p.terminer();
+        });
+      </script>
+    </template>
+  </body>
+</html>

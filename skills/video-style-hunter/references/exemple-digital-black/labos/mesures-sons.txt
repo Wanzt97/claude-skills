@@ -1,0 +1,37 @@
+Cash Register Success|-0.0|-10.4
+Censor Beep|-3.4|-4.8
+Clean Ding|-9.0|-12.9
+Keyboard Typing Loop|-6.3|-27.2
+Mouse Click|-4.1|-27.5
+New Notification Ping|-3.6|-14.6
+Phone Notification Ping|-5.6|-12.3
+Sent Message Ping|-9.8|-18.6
+Slow Dell Keyboard Typing|-8.1|-29.7
+Synthetic Bubble Pop|-3.0|-20.4
+Tiny Bubble Pop|-1.3|-20.6
+UI Pop-up Alert|0.0|-16.0
+Video Call Ringtone|-5.0|-21.7
+Airy Short Whoosh|-2.0|-20.3
+Deep Short Whoosh|-4.1|-17.5
+Fast Suspense Riser|-8.9|-18.6
+Long Suspense Riser|0.0|-6.9
+Record Scratch Rewind|-1.1|-7.8
+Record Scratch Stop|-2.3|-14.2
+Sharp Bass Riser|-4.6|-20.1
+Short Drum Roll Sting|-5.5|-17.9
+Simple Whoosh|-10.0|-21.6
+Taiko Hit|-0.3|-7.0
+Camera Shutter|-2.8|-15.6
+Gear Single Click|-13.3|-38.2
+Gear Turn Click|-12.8|-29.7
+Glitchy TV Signal|-25.1|-28.6
+Light Clock Tick|-20.7|-40.2
+Mechanical Clicking Loop|-2.2|-17.8
+Short Shutter Click|-6.5|-24.9
+TV Switch Off Noise|-2.9|-14.9
+Vintage Camera Shutter|-0.2|-17.8
+Anime Wow Reaction|-15.2|-21.8
+Awkward Crow Flyby|-5.9|-16.0
+Dramatic Thunder Roll|0.0|-8.0
+Sitcom Laugh Track|-10.2|-21.1
+Vine Boom Impact|0.0|-7.4

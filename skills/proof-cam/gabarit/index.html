@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920, height=1080">
+    <title>proof-cam — gabarit</title>
+    <!--
+      GABARIT proof-cam — la démonstration.
+      Elle enchaîne les six modèles de scène entre des blocs visage, comme un vrai montage.
+      Les règles viennent de proof-cam/FICHE.md ; ce fichier ne contient aucune durée d'animation.
+
+      Dans un vrai montage :
+        1. remplacer voix.mp4 par les rushs coupés ;
+        2. mettre la durée réelle dans data-duration (racine et vidéo) ;
+        3. poser un host par scène animée, aux temps du storyboard ;
+        4. lister les blocs visage dans BLOCS_VISAGE.
+    -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="lib/cam-search.js"></script>
+    <!-- L'HABILLAGE. Changer de marque = changer ce fichier : reference, digital-black ou wanzt. -->
+    <link rel="stylesheet" href="lib/habillages/reference.css">
+    <link rel="stylesheet" href="lib/composition.css">
+    <style>
+      body { margin: 0; background: #000; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; }
+      #face-wrap { position: absolute; inset: 0; }
+      #voix { width: 100%; height: 100%; object-fit: cover; }
+      #repere-visage { position: absolute; left: 0; right: 0; bottom: 8%; text-align: center; color: #b9b9b9; }
+      .scene { position: absolute; inset: 0; }
+      #texte-visage { position: absolute; inset: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-width="1920" data-height="1080" data-duration="84">
+      <!-- LE VISAGE. La voix joue en continu sous tout le reste ; les scènes animées la recouvrent. -->
+      <div id="face-wrap">
+        <video id="voix" src="voix.mp4" data-start="0" data-duration="84" data-track-index="0" playsinline data-has-audio="true"></video>
+        <p id="repere-visage" class="cs-mono" data-layout-ignore="">Visage · remplacer voix.mp4 par les rushs coupés</p>
+      </div>
+
+      <!-- TEXTE SUR LE VISAGE. Rare. De part et d'autre de la tête, sans quitter le visage. -->
+      <div id="texte-visage" class="clip" data-start="24" data-duration="4" data-track-index="2">
+        <span class="cs-sur-visage tv-mot" style="left: 6%">un mot</span>
+        <span class="cs-sur-visage tv-mot" style="right: 6%">→ sa suite</span>
+      </div>
+
+      <!-- LES SCÈNES ANIMÉES. Plein cadre, opaques, au-dessus du visage. Coupe franche à l'entrée et à la sortie. -->
+      <div id="el-m01" class="scene" data-composition-id="m01" data-composition-src="compositions/m01-mur-vignettes.html" data-start="3" data-duration="10" data-track-index="1" data-width="1920" data-height="1080"></div>
+      <!-- m01 finit par un zoom à travers : la scène suivante s'enchaîne sans repasser par le visage. -->
+      <div id="el-m02" class="scene" data-composition-id="m02" data-composition-src="compositions/m02-frise-compteur.html" data-start="13" data-duration="11" data-track-index="1" data-width="1920" data-height="1080"></div>
+      <div id="el-m03" class="scene" data-composition-id="m03" data-composition-src="compositions/m03-piece-a-conviction.html" data-start="28" data-duration="11" data-track-index="1" data-width="1920" data-height="1080"></div>
+      <div id="el-m04" class="scene" data-composition-id="m04" data-composition-src="compositions/m04-texte.html" data-start="42" data-duration="10" data-track-index="1" data-width="1920" data-height="1080"></div>
+      <div id="el-m05" class="scene" data-composition-id="m05" data-composition-src="compositions/m05-objet-filaire.html" data-start="55" data-duration="11" data-track-index="1" data-width="1920" data-height="1080"></div>
+      <div id="el-m06" class="scene" data-composition-id="m06" data-composition-src="compositions/m06-interface.html" data-start="69" data-duration="10" data-track-index="1" data-width="1920" data-height="1080"></div>
+
+      <!--
+        MUSIQUE ET BRUITAGES. À ajouter ici, à la racine.
+        Musique : continue, environ 25 LU sous la voix, même niveau partout (FICHE.md, section 6).
+        Bruitages : voir proof-cam/SIGNATURE-wanzt.md. Jamais pendant un bloc visage.
+          <audio id="musique" src="assets/musique.mp3" data-start="0" data-duration="84" data-track-index="10" data-volume="0.06"></audio>
+      -->
+    </div>
+
+    <script>
+      // Chaque bloc visage : [début, fin] en secondes de montage. Le zoom repart de 100 % à chaque bloc.
+      const BLOCS_VISAGE = [[0, 3], [24, 28], [39, 42], [52, 55], [66, 69], [79, 84]];
+
+      const tl = gsap.timeline({ paused: true });
+      CamSearch.visage(tl, "#face-wrap", BLOCS_VISAGE);
+      CamSearch.motsSurVisage(tl, ".tv-mot", [24.4, 25.6]); // début de chaque groupe de mots dans la voix
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

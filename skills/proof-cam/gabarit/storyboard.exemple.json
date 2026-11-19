@@ -1,0 +1,69 @@
+{
+  "projet": "demonstration-du-gabarit",
+  "habillage": "reference",
+  "scenes": [
+    { "id": "v01", "type": "visage", "start": 0, "end": 3, "phrase": "L'accroche, en une phrase." },
+    { "id": "m01", "type": "animation", "modele": "m01-mur-vignettes", "fichier": "compositions/m01-mur-vignettes.html",
+      "decision": 4, "pourquoi": "Preuve par le nombre : neuf extraits disent le même mot.",
+      "start": 3, "end": 13,
+      "beats": [
+        { "t": 0.3, "geste": "surgir", "cible": "extrait 1", "mot": "le mot" },
+        { "t": 1.0, "geste": "voler", "cible": "grille entière", "mot": "" },
+        { "t": 2.0, "geste": "surgir", "cible": "extrait 3", "mot": "le mot" },
+        { "t": 6.6, "geste": "accentuer", "cible": "étiquettes", "mot": "" },
+        { "t": 8.4, "geste": "traverser", "cible": "extrait 5", "mot": "" }
+      ] },
+    { "id": "m02", "type": "animation", "modele": "m02-frise-compteur", "fichier": "compositions/m02-frise-compteur.html",
+      "decision": 1, "pourquoi": "Un montant et une date : fait chiffré.",
+      "start": 13, "end": 24,
+      "beats": [
+        { "t": 0.4, "geste": "apparaitre", "cible": "date", "mot": "septembre" },
+        { "t": 1.0, "geste": "voler", "cible": "chiffre", "mot": "" },
+        { "t": 1.6, "geste": "compteur", "cible": "chiffre", "mot": "un milliard" },
+        { "t": 3.9, "geste": "apparaitre", "cible": "durée", "mot": "mois" },
+        { "t": 5.4, "geste": "voler", "cible": "pièce", "mot": "" }
+      ] },
+    { "id": "v02", "type": "visage", "start": 24, "end": 28, "phrase": "Alors, comment est-ce possible ?" },
+    { "id": "m03", "type": "animation", "modele": "m03-piece-a-conviction", "fichier": "compositions/m03-piece-a-conviction.html",
+      "decision": 1, "pourquoi": "« D'après… » : la source se montre.",
+      "start": 28, "end": 39,
+      "beats": [
+        { "t": 0.2, "geste": "basculer", "cible": "document A", "mot": "" },
+        { "t": 1.4, "geste": "voler", "cible": "phrase A", "mot": "d'après" },
+        { "t": 2.6, "geste": "surligner", "cible": "phrase A", "mot": "" },
+        { "t": 4.6, "geste": "voler", "cible": "document B", "mot": "" },
+        { "t": 7.4, "geste": "apparaitre", "cible": "note *", "mot": "près de" }
+      ] },
+    { "id": "v03", "type": "visage", "start": 39, "end": 42, "phrase": "Et c'est là que ça devient intéressant." },
+    { "id": "m04", "type": "animation", "modele": "m04-texte", "fichier": "compositions/m04-texte.html",
+      "decision": 3, "pourquoi": "Citation : texte mot à mot, chute en italique.",
+      "start": 42, "end": 52,
+      "beats": [
+        { "t": 0.6, "geste": "motAMot", "cible": "phrase", "mot": "La" },
+        { "t": 3.1, "geste": "motAMot", "cible": "chute", "mot": "et" },
+        { "t": 5.4, "geste": "voler", "cible": "titre", "mot": "" },
+        { "t": 6.2, "geste": "titreMasque", "cible": "titre", "mot": "le concept" }
+      ] },
+    { "id": "v04", "type": "visage", "start": 52, "end": 55, "phrase": "Je pense que tout se joue ici." },
+    { "id": "m05", "type": "animation", "modele": "m05-objet-filaire", "fichier": "compositions/m05-objet-filaire.html",
+      "decision": 2, "pourquoi": "Idée abstraite : un objet la rend visible.",
+      "start": 55, "end": 66,
+      "beats": [
+        { "t": 0.3, "geste": "apparaitre", "cible": "cube", "mot": "" },
+        { "t": 1.2, "geste": "apparaitre", "cible": "idée", "mot": "l'idée" },
+        { "t": 3.0, "geste": "voler", "cible": "dessus du cube", "mot": "" },
+        { "t": 6.4, "geste": "voler", "cible": "cœur", "mot": "dedans" }
+      ] },
+    { "id": "v05", "type": "visage", "start": 66, "end": 69, "phrase": "Donc, concrètement ?" },
+    { "id": "m06", "type": "animation", "modele": "m06-interface", "fichier": "compositions/m06-interface.html",
+      "decision": 4, "pourquoi": "Démonstration : le produit en usage, puis les acteurs cités.",
+      "start": 69, "end": 79,
+      "beats": [
+        { "t": 0.5, "geste": "taper", "cible": "champ", "mot": "" },
+        { "t": 3.4, "geste": "voler", "cible": "résultat", "mot": "regardez" },
+        { "t": 6.6, "geste": "voler", "cible": "acteurs", "mot": "" },
+        { "t": 7.6, "geste": "apparaitre", "cible": "logo 1", "mot": "Nom 1" }
+      ] },
+    { "id": "v06", "type": "visage", "start": 79, "end": 84, "phrase": "La prochaine fois, posez-vous la question." }
+  ]
+}

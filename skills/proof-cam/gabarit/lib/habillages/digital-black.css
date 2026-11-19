@@ -1,0 +1,55 @@
+/*
+ * proof-cam — habillage « digital-black ».
+ * Valeurs recopiées de proof-cam/HABILLAGE-digital-black.md. Ce fichier-là fait foi : le corriger d'abord.
+ */
+
+/*
+ * Special Gothic Expanded One, choisie par Wanzt. Une seule graisse, large et noire.
+ * Elle est très large : réduite à 82 %, elle tient dans les scènes sans déborder.
+ */
+@font-face {
+  font-family: "CS Gras";
+  src: url("../../assets/fonts/SpecialGothicExpandedOne-Regular.woff2") format("woff2");
+  font-weight: 100 900;
+  size-adjust: 82%;
+}
+@font-face {
+  font-family: "CS Mono";
+  src: url("../../assets/fonts/JetBrainsMono-Variable.ttf") format("truetype");
+  font-weight: 100 800;
+}
+@font-face {
+  font-family: "CS Chute";
+  src: url("../../assets/fonts/InstrumentSerif-Italic.woff2") format("woff2");
+  font-style: italic;
+}
+
+:root {
+  /* Fond principal : sombre. Valeurs de la marque. */
+  --cs-fond-principal: #0a0a0a;
+  --cs-texte-principal: #fafaf8;
+  --cs-gris-principal: #b9b9b8;
+  --cs-filet-principal: #2c2c2c;
+  --cs-point-principal: #2c2c2c;
+  --cs-carte-principal: #0a0a0a;
+  --cs-ombre-principal: none;
+
+  /* Fond secondaire : clair. La marque n'en a pas ; il est dérivé de sa valeur la plus claire. */
+  --cs-fond-second: #fafaf8;
+  --cs-texte-second: #0a0a0a;
+  --cs-gris-second: #5e5e5d;
+  --cs-filet-second: #d9d9d6;
+  --cs-point-second: #dededb;
+  --cs-carte-second: #fafaf8;
+  --cs-ombre-second: 0 6px 18px rgba(0, 0, 0, 0.08);
+
+  /* L'accent : le jaune de la marque. Son bleu n'est pas utilisé (un seul accent). */
+  --cs-accent: #ebb52e;
+  --cs-sur-accent: #0a0a0a;
+  --cs-surl-force: 1;
+
+  /* Chiffres et mots-clés. */
+  --cs-graisse: 400;
+  --cs-approche: -0.02em;
+  --cs-espace-mots: 0.14em; /* ses espaces sont étroits pour des lettres aussi larges */
+}

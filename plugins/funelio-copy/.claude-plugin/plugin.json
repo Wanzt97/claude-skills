@@ -1,0 +1,9 @@
+{
+  "name": "funelio-copy",
+  "version": "0.8.0",
+  "description": "Pipeline complet Avatar → Offre → Copy → Lancement. Publicités Facebook/Instagram en scripts vidéo exclusivement (méthode Sabri Suby, 3 concepts × 3 hooks). Séquence email AIDA. Page de vente PASTOR. Offre Hormozi + Brunson. Avatar via Apify + Halo Strategy.",
+  "author": {
+    "name": "Funelio"
+  },
+  "keywords": ["copywriting", "marketing", "offre", "avatar", "vente", "agence", "services", "hormozi", "brunson", "apify", "halo-strategy", "cialdini", "sabri-suby", "video-ads", "email-marketing"]
+}

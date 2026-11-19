@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8">
+    <!--
+      MODÈLE m04 — Texte mot à mot, chute en italique, titre masqué (fond secondaire)
+      Sert à : une définition, une citation, une formule (FICHE.md, décision n° 3).
+      Le fond secondaire est une hypothèse de la fiche : il servirait pour les analogies et
+      « l'ancienne façon de faire ». Pour revenir au fond principal, retirer « cs-second ».
+      Chaque mot doit avoir son temps : un temps par mot, lu dans transcript.json.
+    -->
+  </head>
+  <body>
+    <template>
+      <style>
+        #root { position: absolute; inset: 0; }
+        #m04-monde { width: 5760px; height: 3240px; }
+      </style>
+
+      <div id="root" data-composition-id="m04" data-width="1920" data-height="1080">
+        <div class="cs-scene cs-second">
+          <div class="cs-fond"></div>
+          <div id="m04-monde" class="cs-monde" data-layout-allow-overflow="">
+            <div class="cs-croix" style="left: 900px; top: 900px"></div>
+            <div class="cs-croix" style="left: 2760px; top: 900px"></div>
+
+            <!-- La citation : un bloc, pour que la caméra cadre l'ensemble -->
+            <div id="m04-citation" style="left: 1000px; top: 1000px; width: 1500px">
+              <p id="m04-source" class="cs-mono" style="margin-bottom: 40px">Auteur · Ouvrage · 1960</p>
+              <p id="m04-phrase" class="cs-gras cs-moyen" style="margin-bottom: 36px">La phrase clé se dit un mot après l'autre,</p>
+              <p id="m04-chute" class="cs-chute">et la chute change de voix.</p>
+            </div>
+
+            <!-- Le concept : titre masqué, réservé aux mots qui nomment une idée centrale -->
+            <p id="m04-titre" class="cs-gras" style="left: 3400px; top: 1180px; font-size: 300px">le concept</p>
+            <p id="m04-definition" class="cs-mono" style="left: 3412px; top: 1520px">Sa définition, en une ligne</p>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        CamSearch.pret(() => {
+          const tl = gsap.timeline({ paused: true });
+          const p = CamSearch.planche({ tl, monde: "#m04-monde", duree: 10 });
+
+          // ---------- LES BEATS (secondes locales à la scène) ----------
+          // Démo : des temps réguliers. Dans un vrai montage, recopier le début de chaque mot.
+          const MOTS_PHRASE = CamSearch.cadence(0.6, 9, 0.26); // 9 mots
+          const MOTS_CHUTE = CamSearch.cadence(3.1, 6, 0.3);   // 6 mots
+          const VOL_TITRE = 5.4;
+          const MOT_TITRE = 6.2;     // le concept est nommé
+          const MOT_DEFINITION = 7.4;
+
+          p.cadrer(p.aGauche("#m04-citation"), 0.9);
+          p.apparaitre("#m04-source", 0.2);
+          p.motAMot("#m04-phrase", MOTS_PHRASE);
+          p.motAMot("#m04-chute", MOTS_CHUTE);
+
+          p.voler(VOL_TITRE, p.aGauche("#m04-titre"), 0.8);
+          p.eteindre("#m04-phrase, #m04-chute, #m04-source", VOL_TITRE);
+          p.titreMasque("#m04-titre", p.auMot(MOT_TITRE));
+          p.apparaitre("#m04-definition", p.auMot(MOT_DEFINITION));
+
+          window.__timelines["m04"] = p.terminer();
+        });
+      </script>
+    </template>
+  </body>
+</html>

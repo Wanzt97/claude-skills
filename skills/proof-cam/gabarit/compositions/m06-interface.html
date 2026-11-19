@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8">
+    <!--
+      MODÈLE m06 — Maquette d'interface, extrait en cadre, logos en énumération
+      Sert à : montrer un produit en usage, puis un exemple et ses acteurs
+      (FICHE.md, décisions n° 1, 4 et 5).
+      L'extrait vidéo est un vrai fichier fourni dans assets/broll/ :
+        <video src="../assets/broll/resultat.mp4" muted playsinline
+               data-start="4.4" data-duration="5.6" style="width:100%;height:100%;object-fit:cover"></video>
+      Les logos sont de vrais fichiers fournis par Wanzt : <img src="../assets/preuves/logo.svg" alt="" />.
+    -->
+  </head>
+  <body>
+    <template>
+      <style>
+        #root { position: absolute; inset: 0; }
+        #m06-monde { width: 5760px; height: 3240px; }
+        .m06-logo { width: 220px; height: 220px; }
+      </style>
+
+      <div id="root" data-composition-id="m06" data-width="1920" data-height="1080">
+        <div class="cs-scene">
+          <div class="cs-fond"></div>
+          <div id="m06-monde" class="cs-monde" data-layout-allow-overflow="">
+            <!-- La maquette : un champ où le texte se tape -->
+            <p id="m06-libelle" class="cs-mono cs-petit" style="left: 1400px; top: 1290px">Le produit · ce qu'on lui demande</p>
+            <div id="m06-champ" class="cs-champ" style="left: 1400px; top: 1350px; width: 1500px; height: 130px">
+              <span id="m06-saisie"></span><span class="cs-curseur"></span>
+            </div>
+            <div id="m06-jauge" class="cs-jauge" style="left: 1400px; top: 1500px; width: 1500px"></div>
+
+            <!-- Le résultat : un extrait réel, dans un cadre -->
+            <div id="m06-cadre" class="cs-carte" style="left: 3300px; top: 1100px; width: 1120px; height: 630px">
+              <div class="cs-a-remplacer" style="width: 100%; height: 100%">À remplacer : extrait vidéo du résultat</div>
+            </div>
+            <p id="m06-legende" class="cs-mono cs-petit" style="left: 3300px; top: 1750px">Le résultat · source</p>
+
+            <!-- Les acteurs : un logo par nom prononcé -->
+            <div id="m06-l1" class="m06-logo cs-a-remplacer" style="left: 1400px; top: 2100px">Logo 1</div>
+            <div id="m06-l2" class="m06-logo cs-a-remplacer" style="left: 1700px; top: 2100px">Logo 2</div>
+            <div id="m06-l3" class="m06-logo cs-a-remplacer" style="left: 2000px; top: 2100px">Logo 3</div>
+            <p id="m06-n1" class="cs-mono cs-petit" style="left: 1400px; top: 2340px">Nom 1</p>
+            <p id="m06-n2" class="cs-mono cs-petit" style="left: 1700px; top: 2340px">Nom 2</p>
+            <p id="m06-n3" class="cs-mono cs-petit" style="left: 2000px; top: 2340px">Nom 3</p>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        CamSearch.pret(() => {
+          const tl = gsap.timeline({ paused: true });
+          const p = CamSearch.planche({ tl, monde: "#m06-monde", duree: 10 });
+
+          // ---------- LES BEATS (secondes locales à la scène) ----------
+          const SAISIE = 0.5;        // la voix lit la demande
+          const VOL_RESULTAT = 3.4;  // « et regardez »
+          const VOL_ACTEURS = 6.6;   // la voix cite les acteurs
+          const NOMS = [7.6, 8.2, 8.8]; // un logo par nom prononcé
+
+          p.cadrer("#m06-champ", 1.15);
+          p.apparaitre("#m06-libelle, #m06-champ", 0.1);
+          const finSaisie = p.taper("#m06-saisie", "ce que la voix lit à l'écran", SAISIE);
+          p.barre("#m06-jauge", finSaisie, 1.0);
+
+          const pose = p.voler(VOL_RESULTAT, "#m06-cadre", 1.3);
+          p.eteindre("#m06-libelle, #m06-champ, #m06-jauge", VOL_RESULTAT);
+          p.surgir("#m06-cadre", pose);
+          p.apparaitre("#m06-legende", pose + 0.2);
+
+          p.voler(VOL_ACTEURS, { x: 1810, y: 2240 }, 1.5);
+          p.desaturer("#m06-cadre", VOL_ACTEURS);
+          NOMS.forEach((t, i) => p.apparaitre(`#m06-l${i + 1}, #m06-n${i + 1}`, p.auMot(t)));
+
+          window.__timelines["m06"] = p.terminer();
+        });
+      </script>
+    </template>
+  </body>
+</html>

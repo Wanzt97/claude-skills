@@ -1,0 +1,127 @@
+<!--
+  Template de référence pour le skill storyboard-visualizer.
+  Copier ce code dans l'appel show_widget, puis remplacer UNIQUEMENT le tableau
+  `const scenes = [...]` par les scènes parsées depuis le STORYBOARD.md.
+  Garder le reste identique (timeline, cartes, chip copiable, toggle détail),
+  sauf demande explicite de changement de disposition.
+
+  Champs attendus par scène :
+  { id, t, dur, title, anim, pos, type ('talk'|'screen'|'breath'),
+    v ('rust'|'teal'|null), point, treat, mvt, vo, assets, trans, code }
+  `code` est optionnel : si absent, il est calculé à la volée avec slugify().
+-->
+<h2 style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">Storyboard de production : frise horizontale des scènes avec code copiable par scène.</h2>
+<div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap;font-size:12px;color:var(--text-secondary);margin:0 0 8px;">
+  <span style="display:flex;align-items:center;gap:6px;"><span style="width:12px;height:12px;border-radius:3px;background:var(--surface-2);border:1px solid var(--border-strong);display:inline-block;"></span>Talking-head</span>
+  <span style="display:flex;align-items:center;gap:6px;"><span style="width:12px;height:12px;border-radius:3px;background:var(--text-primary);display:inline-block;"></span>Plein écran (b-roll)</span>
+  <span style="display:flex;align-items:center;gap:6px;"><span style="width:12px;height:12px;border-radius:3px;background:var(--surface-1);border:1px dashed var(--border-strong);display:inline-block;"></span>Respiration</span>
+  <span style="display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:#C2410C;display:inline-block;"></span>Voltage rust</span>
+  <span style="display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:#0F766E;display:inline-block;"></span>Voltage teal</span>
+</div>
+<div style="font-size:11px;color:var(--text-muted);margin-bottom:14px;">Clique un bloc de la timeline pour sauter à la scène. Clique le code en bas de chaque carte pour le copier.</div>
+<div id="timeline" style="display:flex;width:100%;height:28px;border-radius:6px;overflow:hidden;gap:1px;margin-bottom:4px;"></div>
+<div id="ticks" style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-bottom:16px;"></div>
+<div id="list" style="display:flex;flex-direction:row;overflow-x:auto;gap:12px;padding:2px 2px 14px;scroll-snap-type:x proximity;"></div>
+<script>
+// TODO: remplacer ce tableau par les scènes parsées depuis le STORYBOARD.md.
+const scenes = [
+  // { id:1, t:"0:00–0:05", dur:5, title:"Hook", anim:"...", pos:"...", type:"talk", v:"rust", point:"...", treat:"...", mvt:"...", vo:"...", assets:"...", trans:"...", code:"S01_hook" }
+];
+
+function slugify(str) {
+  return str.normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
+}
+function fallbackCopy(text, cb) {
+  const ta = document.createElement('textarea');
+  ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+  document.body.appendChild(ta); ta.select();
+  try { document.execCommand('copy'); } catch (e) {}
+  document.body.removeChild(ta);
+  cb();
+}
+function copyCode(text, chipEl) {
+  const label = chipEl.querySelector('.code-label');
+  const orig = label.textContent;
+  function done() {
+    label.textContent = 'copié';
+    setTimeout(() => { label.textContent = orig; }, 1100);
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done).catch(() => fallbackCopy(text, done));
+  } else {
+    fallbackCopy(text, done);
+  }
+}
+
+// Repères temporels (0%, 25%, 50%, 75%, 100% de la durée totale)
+const totalDur = scenes.reduce((a, s) => a + s.dur, 0);
+function fmt(sec) {
+  const m = Math.floor(sec / 60), s = Math.round(sec % 60);
+  return m + ':' + String(s).padStart(2, '0');
+}
+const ticks = document.getElementById('ticks');
+[0, 0.25, 0.5, 0.75, 1].forEach(f => {
+  const span = document.createElement('span');
+  span.textContent = fmt(totalDur * f);
+  ticks.appendChild(span);
+});
+
+const tl = document.getElementById('timeline');
+const list = document.getElementById('list');
+
+scenes.forEach(s => {
+  const seg = document.createElement('div');
+  seg.style.flex = s.dur + ' 0 0';
+  seg.style.cursor = 'pointer';
+  seg.title = s.id + '. ' + s.title + ' (' + s.t + ')';
+  if (s.type === 'screen') { seg.style.background = 'var(--text-primary)'; }
+  else if (s.type === 'breath') { seg.style.background = 'var(--surface-1)'; seg.style.border = '1px dashed var(--border-strong)'; }
+  else { seg.style.background = 'var(--surface-2)'; seg.style.border = '1px solid var(--border-strong)'; }
+  seg.addEventListener('click', () => {
+    const card = document.getElementById('card-' + s.id);
+    card.scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
+    card.style.borderColor = 'var(--text-accent)';
+    setTimeout(() => { card.style.borderColor = 'var(--border)'; }, 900);
+  });
+  tl.appendChild(seg);
+});
+
+scenes.forEach(s => {
+  const code = s.code || ('S' + String(s.id).padStart(2,'0') + '_' + slugify(s.title));
+  const card = document.createElement('div');
+  card.id = 'card-' + s.id;
+  card.style.cssText = 'flex:0 0 260px;scroll-snap-align:start;display:flex;flex-direction:column;border:0.5px solid var(--border);border-radius:10px;padding:10px 12px;background:var(--surface-2);transition:border-color .3s;cursor:pointer;align-self:flex-start;';
+  const dot = s.v ? '<span style="width:8px;height:8px;border-radius:50%;display:inline-block;vertical-align:middle;margin-right:6px;background:' + (s.v==='rust'?'#C2410C':'#0F766E') + ';"></span>' : '';
+  card.innerHTML =
+    '<div style="font-size:11px;color:var(--text-muted);font-variant-numeric:tabular-nums;line-height:1.3;">' + s.t + '</div>' +
+    '<div style="margin-top:4px;line-height:1.35;">' + dot +
+      '<span style="font-size:14px;font-weight:500;">' + s.id + '. ' + s.title + '</span>' +
+    '</div>' +
+    '<div style="font-size:11px;color:var(--text-secondary);margin-top:6px;line-height:1.4;">' + s.anim + '</div>' +
+    '<div style="font-size:11px;color:var(--text-muted);margin-top:2px;line-height:1.4;">' + s.pos + '</div>' +
+    '<div style="font-size:12px;color:var(--text-secondary);margin-top:6px;line-height:1.5;">' + s.point + '</div>' +
+    '<div class="detail" style="display:none;margin-top:8px;padding-top:8px;border-top:0.5px solid var(--border);font-size:11px;color:var(--text-secondary);line-height:1.55;">' +
+      '<div><strong style="color:var(--text-primary);">Traitement — </strong>' + s.treat + '</div>' +
+      '<div style="margin-top:5px;"><strong style="color:var(--text-primary);">Mouvement — </strong>' + s.mvt + '</div>' +
+      '<div style="margin-top:5px;"><strong style="color:var(--text-primary);">Captions / voix off — </strong>' + s.vo + '</div>' +
+      '<div style="margin-top:5px;"><strong style="color:var(--text-primary);">Assets — </strong>' + s.assets + '</div>' +
+      '<div style="margin-top:5px;"><strong style="color:var(--text-primary);">Transition — </strong>' + s.trans + '</div>' +
+    '</div>' +
+    '<div style="flex:1;"></div>' +
+    '<div class="code-chip" style="display:inline-flex;align-items:center;gap:4px;font-family:var(--font-mono);font-size:10px;color:var(--text-accent);background:var(--bg-accent);border-radius:4px;padding:2px 6px;margin-top:10px;cursor:pointer;max-width:100%;overflow:hidden;align-self:flex-start;">' +
+      '<span class="code-label" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + code + '</span>' +
+      '<i class="ti ti-copy" style="font-size:12px;flex:none;" aria-hidden="true"></i>' +
+    '</div>';
+  const chip = card.querySelector('.code-chip');
+  chip.addEventListener('click', (e) => {
+    e.stopPropagation();
+    copyCode(code, chip);
+  });
+  card.addEventListener('click', () => {
+    const d = card.querySelector('.detail');
+    d.style.display = d.style.display === 'none' ? 'block' : 'none';
+  });
+  list.appendChild(card);
+});
+</script>

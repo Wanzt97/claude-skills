@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8">
+    <!--
+      MODÈLE m02 — Frise datée + compteur
+      Sert à : un fait chiffré et daté (FICHE.md, décision n° 1).
+      Pour s'en servir : copier le fichier, remplacer « m02 » partout par l'id de la scène,
+      changer les textes, puis régler les temps de la section « LES BEATS ».
+    -->
+  </head>
+  <body>
+    <template>
+      <style>
+        #root { position: absolute; inset: 0; }
+        #m02-monde { width: 5760px; height: 3240px; }
+      </style>
+
+      <div id="root" data-composition-id="m02" data-width="1920" data-height="1080">
+        <div class="cs-scene">
+        <div class="cs-fond"></div>
+        <div id="m02-monde" class="cs-monde" data-layout-allow-overflow="">
+          <div class="cs-filigrane" data-layout-ignore="" style="left: 900px; top: 760px">2026</div>
+
+          <!-- La frise -->
+          <div class="cs-trait" style="left: 600px; top: 1700px; width: 4600px"></div>
+          <div id="m02-point-1" class="cs-pastille cs-accent" style="left: 1290px; top: 1690px"></div>
+          <p id="m02-date" class="cs-mono" style="left: 1290px; top: 1750px">24.09.2026</p>
+          <div id="m02-point-2" class="cs-pastille" style="left: 3690px; top: 1690px"></div>
+          <p id="m02-date-2" class="cs-mono" style="left: 3690px; top: 1750px">Le même jour</p>
+
+          <!-- Le chiffre héros -->
+          <p id="m02-chiffre" class="cs-gras" style="left: 1290px; top: 1180px">0</p>
+          <p id="m02-libelle" class="cs-mono" style="left: 1296px; top: 1400px">de rythme annualisé</p>
+          <p id="m02-duree" class="cs-gras cs-moyen" style="left: 1296px; top: 1500px">en 18 mois</p>
+
+          <!-- La pièce liée au deuxième point -->
+          <div id="m02-piece" class="cs-carte" style="left: 3690px; top: 1080px; width: 900px; height: 540px">
+            <div class="cs-a-remplacer" style="width: 100%; height: 100%">À remplacer : capture de la source</div>
+          </div>
+        </div>
+        </div>
+      </div>
+
+      <script>
+        CamSearch.pret(() => {
+          const tl = gsap.timeline({ paused: true });
+          const p = CamSearch.planche({ tl, monde: "#m02-monde", duree: 11 });
+
+          // ---------- LES BEATS (secondes locales à la scène) ----------
+          const MOT_DATE = 0.4;      // « septembre »
+          const MOT_CHIFFRE = 1.6;   // début du nombre prononcé
+          const FIN_CHIFFRE = 2.9;   // fin du nombre prononcé : le compteur s'arrête ici
+          const MOT_DUREE = 3.9;     // « mois »
+          const VOL_PIECE = 5.4;     // la voix passe au deuxième fait
+          const VUE_ENSEMBLE = 8.6;
+
+          p.cadrer(p.aGauche("#m02-date"), 1.5);
+          p.pastille("#m02-point-1", p.auMot(MOT_DATE));
+          p.apparaitre("#m02-date", p.auMot(MOT_DATE));
+
+          p.voler(1.0, p.aGauche("#m02-chiffre"), 1, { duree: "court" });
+          p.compteur("#m02-chiffre", { a: 1000, t: p.auMot(MOT_CHIFFRE), fin: FIN_CHIFFRE, apres: " M$" });
+          p.apparaitre("#m02-libelle", p.auMot(MOT_CHIFFRE));
+          p.apparaitre("#m02-duree", p.auMot(MOT_DUREE));
+
+          const pose = p.voler(VOL_PIECE, "#m02-piece", 1.5);
+          p.eteindre("#m02-chiffre, #m02-libelle, #m02-duree, #m02-date", VOL_PIECE);
+          p.pastille("#m02-point-2", pose);
+          p.apparaitre("#m02-date-2", pose);
+          p.basculer("#m02-piece", VOL_PIECE + 0.4);
+
+          p.voler(VUE_ENSEMBLE, { x: 2900, y: 1450 }, 0.42, { duree: "long", derive: -1 });
+
+          window.__timelines["m02"] = p.terminer();
+        });
+      </script>
+    </template>
+  </body>
+</html>

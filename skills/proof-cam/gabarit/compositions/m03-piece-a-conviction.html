@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8">
+    <!--
+      MODÈLE m03 — Pièce à conviction surlignée
+      Sert à : prouver un fait par sa source (FICHE.md, décision n° 1).
+      UNE PREUVE EST TOUJOURS RÉELLE. Remplacer le contenu de chaque « cs-papier » par la vraie
+      capture, fournie dans assets/preuves/ :
+        <img src="../assets/preuves/article.png" alt="" />
+      puis poser chaque « cs-surl » sur la phrase lue, en réglant left / top / width / height.
+      Si la capture manque, laisser le bloc « À remplacer » : ne jamais inventer un tweet ou un article.
+    -->
+  </head>
+  <body>
+    <template>
+      <style>
+        #root { position: absolute; inset: 0; }
+        #m03-monde { width: 5760px; height: 3240px; }
+        .m03-surl { left: -8px; top: 2px; right: -8px; bottom: 2px; }
+      </style>
+
+      <div id="root" data-composition-id="m03" data-width="1920" data-height="1080">
+        <div class="cs-scene">
+          <div class="cs-fond"></div>
+          <div id="m03-monde" class="cs-monde" data-layout-allow-overflow="">
+            <!-- Première pièce -->
+            <div id="m03-doc-a" class="cs-papier" style="left: 1300px; top: 1100px; width: 1200px; height: 700px">
+              <p class="cs-mono cs-petit" style="margin-bottom: 36px; color: #6b6b6b">À remplacer : capture réelle</p>
+              <div class="cs-ligne" style="width: 92%"></div>
+              <div class="cs-ligne" style="width: 78%"></div>
+              <p id="m03-phrase-a" class="cs-phrase">la phrase lue à voix haute<span id="m03-surl-a" class="cs-surl m03-surl"></span></p>
+              <div class="cs-ligne" style="width: 88%"></div>
+              <div class="cs-ligne" style="width: 60%"></div>
+            </div>
+            <p id="m03-source-a" class="cs-mono cs-petit" style="left: 1300px; top: 1830px">Source · Auteur · 24.09.2026</p>
+
+            <!-- Deuxième pièce -->
+            <div id="m03-doc-b" class="cs-papier" style="left: 3100px; top: 900px; width: 1100px; height: 1100px">
+              <p class="cs-mono cs-petit" style="margin-bottom: 36px; color: #6b6b6b">À remplacer : capture réelle</p>
+              <div class="cs-ligne" style="width: 95%"></div>
+              <div class="cs-ligne" style="width: 84%"></div>
+              <div class="cs-ligne" style="width: 90%"></div>
+              <div class="cs-ligne" style="width: 55%; margin-bottom: 56px"></div>
+              <p id="m03-phrase-b" class="cs-phrase">un premier passage<span id="m03-surl-b1" class="cs-surl m03-surl"></span></p>
+              <div class="cs-ligne" style="width: 80%"></div>
+              <p id="m03-phrase-c" class="cs-phrase">puis le chiffre exact<span id="m03-surl-b2" class="cs-surl m03-surl"></span></p>
+              <div class="cs-ligne" style="width: 86%"></div>
+              <div class="cs-ligne" style="width: 70%"></div>
+            </div>
+            <p id="m03-source-b" class="cs-mono cs-petit" style="left: 3100px; top: 2030px">Média · 24.09.2026</p>
+
+            <!-- Rectification : quand l'oral arrondit, l'écran donne le chiffre exact. -->
+            <p id="m03-note" class="cs-mono cs-petit" style="left: 3100px; top: 2090px; color: var(--cs-texte)"><span class="cs-accent">*</span> le chiffre exact, si la voix a arrondi</p>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        CamSearch.pret(() => {
+          const tl = gsap.timeline({ paused: true });
+          const p = CamSearch.planche({ tl, monde: "#m03-monde", duree: 11 });
+
+          // ---------- LES BEATS (secondes locales à la scène) ----------
+          const ENTREE = 0.2;        // la première pièce bascule à l'écran
+          const VOL_PHRASE_A = 1.4;  // « d'après… » : la caméra plonge sur la phrase
+          const VOL_DOC_B = 4.6;     // la voix passe à la deuxième source
+          const NOTE = 7.4;          // la voix arrondit le chiffre
+          const VUE_ENSEMBLE = 8.8;
+
+          p.cadrer("#m03-doc-a", 1.15);
+          p.basculer("#m03-doc-a", ENTREE);
+          p.apparaitre("#m03-source-a", ENTREE + 0.4);
+
+          // Le surlignage part à l'instant exact où la caméra se pose.
+          const poseA = p.voler(VOL_PHRASE_A, "#m03-phrase-a", 2.3);
+          p.surligner("#m03-surl-a", poseA);
+
+          const poseB = p.voler(VOL_DOC_B, "#m03-phrase-b", 2.0);
+          p.eteindre("#m03-doc-a, #m03-source-a", VOL_DOC_B);
+          p.apparaitre("#m03-doc-b, #m03-source-b", VOL_DOC_B + 0.2);
+          p.surligner("#m03-surl-b1, #m03-surl-b2", poseB); // 240 ms entre les deux
+
+          p.apparaitre("#m03-note", p.auMot(NOTE));
+          p.voler(VUE_ENSEMBLE, { x: 2750, y: 1480 }, 0.6, { duree: "long", derive: -1 });
+
+          window.__timelines["m03"] = p.terminer();
+        });
+      </script>
+    </template>
+  </body>
+</html>

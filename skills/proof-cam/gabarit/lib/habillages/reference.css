@@ -1,0 +1,50 @@
+/*
+ * proof-cam — habillage « reference ».
+ * Valeurs recopiées de proof-cam/HABILLAGE-reference.md. Ce fichier-là fait foi : le corriger d'abord.
+ */
+
+@font-face {
+  font-family: "CS Gras";
+  src: url("../../assets/fonts/InterTight-Variable.woff2") format("woff2");
+  font-weight: 100 900;
+}
+@font-face {
+  font-family: "CS Mono";
+  src: url("../../assets/fonts/JetBrainsMono-Variable.ttf") format("truetype");
+  font-weight: 100 800;
+}
+@font-face {
+  font-family: "CS Chute";
+  src: url("../../assets/fonts/InstrumentSerif-Italic.woff2") format("woff2");
+  font-style: italic;
+}
+
+:root {
+  /* Fond principal : sombre. */
+  --cs-fond-principal: #0a0a0a;
+  --cs-texte-principal: #f5f5f5;
+  --cs-gris-principal: #8a8a8a;
+  --cs-filet-principal: #2e2e2e;
+  --cs-point-principal: #2a2a2a;
+  --cs-carte-principal: #131313;
+  --cs-ombre-principal: none;
+
+  /* Fond secondaire : clair. */
+  --cs-fond-second: #f3f3f3;
+  --cs-texte-second: #0a0a0a;
+  --cs-gris-second: #6b6b6b;
+  --cs-filet-second: #cfcfcf;
+  --cs-point-second: #d4d4d4;
+  --cs-carte-second: #ffffff;
+  --cs-ombre-second: 0 6px 18px rgba(0, 0, 0, 0.08);
+
+  /* L'accent, et le texte qu'on pose dessus. */
+  --cs-accent: #d1f916;
+  --cs-sur-accent: #0a0a0a;
+  --cs-surl-force: 1;
+
+  /* Chiffres et mots-clés. */
+  --cs-graisse: 800;
+  --cs-approche: -0.035em;
+  --cs-espace-mots: 0em;
+}

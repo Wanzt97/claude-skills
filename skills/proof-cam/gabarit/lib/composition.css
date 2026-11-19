@@ -1,0 +1,340 @@
+/*
+ * proof-cam — composition.
+ *
+ * Ce fichier applique la composition décrite dans FICHE.md (section 4) : les trois rôles
+ * typographiques, les cartes, le surlignage, les objets. Il ne contient AUCUNE couleur de
+ * marque ni aucun fichier de police : tout vient de l'habillage choisi, dans lib/habillages/.
+ * Changer de marque, c'est changer le fichier d'habillage lié dans index.html, rien ici.
+ */
+
+:root {
+  /* Les trois rôles. Les noms sont fixes ; chaque habillage dit quel fichier de police ils désignent. */
+  --cs-police-gras: "CS Gras", sans-serif;
+  --cs-police-mono: "CS Mono", monospace;
+  --cs-police-chute: "CS Chute", serif;
+
+  /* Par défaut, une scène est sur le fond principal de l'habillage. */
+  --cs-fond: var(--cs-fond-principal);
+  --cs-texte: var(--cs-texte-principal);
+  --cs-gris: var(--cs-gris-principal);
+  --cs-filet: var(--cs-filet-principal);
+  --cs-point: var(--cs-point-principal);
+  --cs-carte: var(--cs-carte-principal);
+  --cs-ombre: var(--cs-ombre-principal);
+}
+
+/* ---------- La scène ---------- */
+
+.cs-scene {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+/* Fond plein cadre, fixe : la trame de points ne bouge pas avec la caméra. */
+.cs-fond {
+  position: absolute;
+  inset: 0;
+  background-color: var(--cs-fond);
+  background-image: radial-gradient(var(--cs-point) 1.5px, transparent 1.5px);
+  background-size: 32px 32px;
+  color: var(--cs-texte);
+}
+/* Le fond secondaire : « l'autre monde » d'une vidéo (analogie, ancienne façon de faire). */
+.cs-second {
+  --cs-fond: var(--cs-fond-second);
+  --cs-texte: var(--cs-texte-second);
+  --cs-gris: var(--cs-gris-second);
+  --cs-filet: var(--cs-filet-second);
+  --cs-point: var(--cs-point-second);
+  --cs-carte: var(--cs-carte-second);
+  --cs-ombre: var(--cs-ombre-second);
+}
+
+/* Le canevas que la caméra parcourt. Sa taille est fixée dans chaque modèle. */
+.cs-monde {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-origin: 0 0;
+  will-change: transform;
+  color: var(--cs-texte);
+}
+.cs-monde > * {
+  position: absolute;
+}
+
+/* Croix de repérage aux angles d'une zone. */
+.cs-croix {
+  width: 28px;
+  height: 28px;
+  background:
+    linear-gradient(var(--cs-gris), var(--cs-gris)) center / 100% 2px no-repeat,
+    linear-gradient(var(--cs-gris), var(--cs-gris)) center / 2px 100% no-repeat;
+}
+
+/* Année ou mot géant en filigrane derrière une frise. */
+.cs-filigrane {
+  font-family: var(--cs-police-gras);
+  font-weight: var(--cs-graisse);
+  font-size: 620px;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--cs-filet);
+  white-space: nowrap;
+}
+
+/* ---------- Les trois rôles typographiques ---------- */
+
+/* Chiffres et mots-clés : 17 à 33 % de la hauteur d'image. */
+.cs-gras {
+  font-family: var(--cs-police-gras);
+  font-weight: var(--cs-graisse);
+  font-size: 200px;
+  line-height: 0.98;
+  letter-spacing: var(--cs-approche);
+  word-spacing: var(--cs-espace-mots);
+  margin: 0;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.cs-gras.cs-moyen {
+  font-size: 104px;
+  line-height: 1.06;
+  white-space: normal;
+}
+
+/* Dates, libellés, sources : 4 à 5,5 % de la hauteur d'image. */
+.cs-mono {
+  font-family: var(--cs-police-mono);
+  font-weight: 400;
+  font-size: 46px;
+  line-height: 1.2;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--cs-gris);
+  margin: 0;
+  white-space: nowrap;
+}
+.cs-mono.cs-petit {
+  font-size: 28px;
+}
+
+/* La chute : serif italique, plus grande que la phrase qu'elle conclut. */
+.cs-chute {
+  font-family: var(--cs-police-chute);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 220px;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.cs-mot {
+  display: inline-block;
+}
+
+/* Titre masqué : les lettres montent de sous la ligne de base. */
+.cs-masque {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+}
+.cs-masque > span {
+  display: inline-block;
+}
+
+/* ---------- Les éléments ---------- */
+
+/* L'accent désigne, il ne décore pas. */
+.cs-accent {
+  color: var(--cs-accent);
+}
+
+/* Carte plate : filet de 1 px. L'ombre dépend du fond : aucune sur un fond sombre. */
+.cs-carte {
+  background: var(--cs-carte);
+  border: 1px solid var(--cs-filet);
+  box-shadow: var(--cs-ombre);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* Extrait externe : noir et blanc tant qu'il n'est pas l'extrait actif. */
+.cs-nb {
+  filter: grayscale(1) contrast(1.15);
+}
+
+/* Étiquette : libellé monospace sur aplat. */
+.cs-etiquette {
+  font-family: var(--cs-police-mono);
+  font-size: 30px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 6px 16px;
+  background: var(--cs-texte);
+  color: var(--cs-fond);
+  white-space: nowrap;
+}
+.cs-etiquette.cs-accent {
+  background: var(--cs-accent);
+  color: var(--cs-sur-accent);
+}
+
+/* Surlignage : rectangle d'accent posé sur le mot lu. */
+.cs-surl {
+  position: absolute;
+  display: block;
+  background: var(--cs-accent);
+  opacity: var(--cs-surl-force); /* un accent foncé se pose en lavis, pour que le texte reste lisible */
+  mix-blend-mode: multiply; /* capture claire : le texte noir reste lisible */
+}
+/* Texte HTML sur fond sombre : placer le rectangle AVANT le texte dans le HTML, il passe derrière. */
+.cs-surl.cs-sur-sombre {
+  mix-blend-mode: normal;
+}
+
+/* Point de frise et pastille. */
+.cs-pastille {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--cs-texte);
+}
+.cs-pastille.cs-accent {
+  background: var(--cs-accent);
+  border-radius: 0;
+}
+
+/* Trait fin : ligne de frise, axe, liaison. */
+.cs-trait {
+  height: 2px;
+  background: var(--cs-filet);
+}
+
+/* Emplacement à remplir : capture, extrait ou logo que Wanzt doit fournir. */
+.cs-a-remplacer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: repeating-linear-gradient(45deg, #3a3a3a 0 24px, #444 24px 48px);
+  color: #e8e8e8;
+  font-family: var(--cs-police-mono);
+  font-size: 30px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-align: center;
+  box-sizing: border-box;
+  padding: 24px;
+}
+
+/* ---------- Pièce à conviction ---------- */
+
+/* Le support d'une capture claire. La vraie capture est une <img> qui remplit la carte. */
+.cs-papier {
+  background: #f3f3f3;
+  color: #0a0a0a;
+  border: 1px solid #cfcfcf;
+  box-sizing: border-box;
+  padding: 56px 64px;
+}
+.cs-papier img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* Fausse ligne de texte : tient la place d'une capture pas encore fournie. */
+.cs-ligne {
+  height: 18px;
+  margin: 0 0 24px;
+  background: #cdcdcd;
+}
+.cs-phrase {
+  position: relative;
+  display: inline-block;
+  font-family: var(--cs-police-gras);
+  font-weight: 600;
+  font-size: 44px;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  word-spacing: var(--cs-espace-mots);
+  margin: 0 0 24px;
+}
+
+/* ---------- Objet filaire ---------- */
+
+/* Cube en fil de fer, vu de trois quarts, sans perspective. Taille : --c. */
+.cs-incline {
+  width: var(--c);
+  height: var(--c);
+  transform: rotateX(-26deg);
+  transform-style: preserve-3d;
+}
+.cs-tourne,
+.cs-couvercle {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+}
+.cs-face {
+  position: absolute;
+  inset: 0;
+  box-sizing: border-box;
+  border: 3px solid var(--cs-texte);
+  background: color-mix(in srgb, var(--cs-texte) 4%, transparent);
+}
+.cs-face.cs-av { transform: translateZ(calc(var(--c) / 2)); }
+.cs-face.cs-ar { transform: rotateY(180deg) translateZ(calc(var(--c) / 2)); }
+.cs-face.cs-dr { transform: rotateY(90deg) translateZ(calc(var(--c) / 2)); }
+.cs-face.cs-ga { transform: rotateY(-90deg) translateZ(calc(var(--c) / 2)); }
+.cs-face.cs-ha { transform: rotateX(90deg) translateZ(calc(var(--c) / 2)); }
+.cs-face.cs-ba { transform: rotateX(-90deg) translateZ(calc(var(--c) / 2)); }
+.cs-face.cs-accent {
+  background: var(--cs-accent);
+  border-color: var(--cs-accent);
+}
+
+/* ---------- Maquette d'interface ---------- */
+
+.cs-champ {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 0 44px;
+  border: 1px solid var(--cs-filet);
+  background: var(--cs-carte);
+  font-family: var(--cs-police-mono);
+  font-size: 44px;
+  color: var(--cs-texte);
+  white-space: nowrap;
+}
+.cs-curseur {
+  display: inline-block;
+  width: 4px;
+  height: 1.1em;
+  margin-left: 8px;
+  background: var(--cs-accent);
+}
+.cs-jauge {
+  height: 10px;
+  background: var(--cs-accent);
+}
+
+/* ---------- Texte sur le visage ---------- */
+
+/* Rare : 3 fois en 4 minutes de visage. De part et d'autre de la tête, au tiers haut. */
+.cs-sur-visage {
+  position: absolute;
+  top: 26%;
+  font-family: var(--cs-police-gras);
+  font-weight: var(--cs-graisse);
+  font-size: 108px;
+  line-height: 1;
+  letter-spacing: var(--cs-approche);
+  word-spacing: var(--cs-espace-mots);
+  color: #ffffff;
+  white-space: nowrap;
+}
